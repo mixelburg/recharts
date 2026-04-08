@@ -3,7 +3,7 @@ import { MouseEvent, ReactElement, ReactNode, SVGProps, useCallback, useMemo, us
 import maxBy from 'es-toolkit/compat/maxBy';
 import sumBy from 'es-toolkit/compat/sumBy';
 import get from 'es-toolkit/compat/get';
-import { RootSurface } from '../container/RootSurface';
+import { Surface } from '../container/Surface';
 import { Layer } from '../container/Layer';
 import { Props as RectangleProps, Rectangle } from '../shape/Rectangle';
 import { getValueByDataKey } from '../util/ChartUtils';
@@ -756,16 +756,6 @@ interface SankeyProps extends EventThrottlingProps {
    * @defaultValue true
    */
   accessibilityLayer?: boolean;
-  /**
-   * Accessible title for the SVG chart element.
-   * When provided, a title element is inserted as the first child of the SVG.
-   */
-  title?: string;
-  /**
-   * Accessible description for the SVG chart element.
-   * When provided, a desc element is inserted into the SVG.
-   */
-  desc?: string;
 }
 
 export type Props = Omit<SVGProps<SVGSVGElement>, keyof SankeyProps> & SankeyProps;
@@ -1121,8 +1111,6 @@ function SankeyImpl(props: InternalSankeyProps) {
     margin,
     verticalAlign,
     align,
-    title,
-    desc,
   } = props;
 
   const attrs = svgPropertiesNoEvents(others);
@@ -1222,7 +1210,7 @@ function SankeyImpl(props: InternalSankeyProps) {
   return (
     <>
       <SetComputedData computedData={{ links: modifiedLinks, nodes: modifiedNodes }} />
-      <RootSurface otherAttributes={attrs} title={title} desc={desc}>
+      <Surface {...attrs} width={width} height={height}>
         {children}
         <AllSankeyLinkElements
           graphicalItemId={id}
@@ -1251,7 +1239,7 @@ function SankeyImpl(props: InternalSankeyProps) {
           }
           onClick={(nodeProps: NodeProps, e: MouseEvent<SVGGraphicsElement>) => handleClick(nodeProps, 'node', e)}
         />
-      </RootSurface>
+      </Surface>
     </>
   );
 }
