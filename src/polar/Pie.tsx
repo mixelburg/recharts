@@ -1013,6 +1013,7 @@ function PieImpl(props: Omit<InternalProps, 'sectors'>) {
   const cells = useMemo(() => findAllByType(props.children, Cell), [props.children]);
 
   const sectors = useAppSelector(state => selectPieSectors(state, id, cells));
+  const sectorsWithAnimProps = useMemo(() => ({ ...propsWithoutId, sectors }), [propsWithoutId, sectors]);
 
   const previousSectorsRef = useRef<ReadonlyArray<PieSectorDataItem> | null>(null);
 
@@ -1039,7 +1040,7 @@ function PieImpl(props: Omit<InternalProps, 'sectors'>) {
         activeShape={props.activeShape}
       />
       <Layer tabIndex={rootTabIndex} className={layerClass}>
-        <SectorsWithAnimation props={{ ...propsWithoutId, sectors }} previousSectorsRef={previousSectorsRef} id={id} />
+        <SectorsWithAnimation props={sectorsWithAnimProps} previousSectorsRef={previousSectorsRef} id={id} />
       </Layer>
     </ZIndexLayer>
   );
